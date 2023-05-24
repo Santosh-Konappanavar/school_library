@@ -87,7 +87,7 @@ Install this project with:
 To run the project, execute the following command:
 
 <ul>
-<li>ruby School_Library.rb</li>
+<li>ruby school_library.rb</li>
 </ul>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
