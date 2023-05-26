@@ -18,7 +18,12 @@ def all_people(people)
   puts 'List of people:'
   puts
   people.each_with_index do |person, index|
-    puts "#{index + 1}. Name: #{person.name}, ID: #{person.id}"
+    role = person.is_a?(Student) ? 'Student' : 'Teacher'
+    if person.is_a?(Student)
+      puts "#{index + 1}. #{role}: #{person.name}, Age: #{person.age}, ID: #{person.id}, Date: #{person.date}"
+    else
+      puts "#{index + 1}. #{role}: #{person.name}, Age: #{person.age}, ID: #{person.id}"
+    end
     puts
   end
 end
@@ -128,9 +133,15 @@ def rental_entry(date, selectedbook, selectedperson, rentals)
 end
 
 def list_rentals(rentals)
+  puts 'Enter the ID of the person:'
+  print 'Person ID: '
+  person_id = gets.chomp.to_i
+
+  filtered_rentals = rentals.select { |rental| rental.person.id == person_id }
+
   puts 'List of rentals:'
   puts
-  rentals.each_with_index do |rental, index|
+  filtered_rentals.each_with_index do |rental, index|
     rental_info(rental, index)
   end
 end
@@ -139,7 +150,7 @@ def rental_info(rental, index)
   book_info = "Book: #{rental.book.title} by #{rental.book.author}"
   person_info = "Person: #{rental.person.name}"
   date_info = "Date: #{rental.date}"
-  puts "#{index + 1}. #{book_info} - #{person_info} - #{date_info}"
+  puts "#{index + 1}.  #{date_info} - #{book_info} - #{person_info}"
   puts
 end
 
