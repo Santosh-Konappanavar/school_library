@@ -100,6 +100,11 @@ To run the project, execute the following command:
 - Twitter: [@SantoshKonapp1](https://twitter.com/SantoshKonappa1)
 - LinkedIn: [@Santosh Konappanavar](https://www.linkedin.com/in/santosh-konappanavar/)
 
+👤 **Okpara Blessing Oluchi**
+
+- GitHub: [@Okpara Blessing Oluchi](https://github.com/Luchy-B)
+- LinkedIn: [@Okpara Blessing Oluchi](https://www.linkedin.com/in/blessingokpara)
+
 ## 🔭 Future Features <a name="future-features"></a>
 
 - [ ] Add graphical interface
@@ -124,7 +129,7 @@ If you like this project give this repo a star and reach out on our social media
 
 ## 🙏 Acknowledgments <a name="acknowledgements"></a>
 
-I would like to thank the Microverse team for their invaluable resources
+We would like to thank the Microverse team for their invaluable resources
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
