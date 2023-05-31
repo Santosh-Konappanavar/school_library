@@ -155,5 +155,5 @@ def rental_info(rental, index)
 end
 
 def quit
-  puts 'bye!'
+  puts 'Thanks for using this App!'
 end
