@@ -30,9 +30,8 @@ def display
   }
   menu.each do |index, value|
     puts "#{index}. #{value}"
-    puts 'Select an option: '
   end
-  menu
+  puts 'Select an option: '   # Move this line outside the loop
 end
 
 def handler(option, books, people, rentals)
