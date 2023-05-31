@@ -19,14 +19,19 @@ end
 
 def display
   puts 'Library Management System'
-  puts '1. List all books'
-  puts '2. List all people'
-  puts '3. Create a person'
-  puts '4. Create a book'
-  puts '5. Create a rental'
-  puts '6. List rentals for a person'
-  puts '7. Quit'
-  print 'Select an option: '
+  menu = {
+    1 => 'List all books',
+    2 => 'List all people',
+    3 => 'Create a person',
+    4 => 'Create a book',
+    5 => 'Create a rental',
+    6 => 'List rentals for a person',
+    7 => 'Quit'
+  }
+  menu.each do |index, value|
+    puts "#{index}. #{value}"
+  end
+  puts 'Select an option: ' # Move this line outside the loop
 end
 
 def handler(option, books, people, rentals)
