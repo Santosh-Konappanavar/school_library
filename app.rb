@@ -6,44 +6,62 @@ require_relative 'rental'
 require_relative 'student'
 require_relative 'teacher'
 
-BOOKS_FILE = 'books.json'
-PEOPLE_FILE = 'people.json'
-RENTALS_FILE = 'rentals.json'
+BOOKS_FILE = 'books.json'.freeze
+PEOPLE_FILE = 'people.json'.freeze
+RENTALS_FILE = 'rentals.json'.freeze
 
 def save_data(data, file_path)
-  File.open(file_path, 'w') do |file|
-    file.write(JSON.generate(data))
-  end
+  File.write(file_path, JSON.generate(data))
   puts "Data saved to #{file_path}!"
 end
-
 
 def load_data(file_path)
   return [] unless File.exist?(file_path)
 
-  file_data = File.open(file_path, 'r') { |file| file.read }
+  file_data = File.read(file_path)
   json_data = JSON.parse(file_data)
 
-  if file_path == BOOKS_FILE
-    json_data.map.with_index do |book_data, index|
-      Book.new(book_data['title'], book_data['author'], index + 1)
+  case file_path
+  when BOOKS_FILE
+    load_books(json_data)
+  when PEOPLE_FILE
+    load_people(json_data)
+  when RENTALS_FILE
+    load_rentals(json_data)
+  end
+end
+
+def load_books(json_data)
+  json_data.map.with_index do |book_data, index|
+    Book.new(book_data['title'], book_data['author'], index + 1)
+  end
+end
+
+def load_people(json_data)
+  json_data.map.with_index do |person_data, index|
+    if person_data['classroom'].nil?
+      Teacher.new(person_data['age'], person_data['specialization'], name: person_data['name'], index: index + 1)
+    else
+      classroom = Classroom.new(person_data['classroom']['classroom&.label'])
+      Student.new(
+        person_data['age'],
+        classroom,
+        parent_permission: person_data['parent_permission'],
+        name: person_data['name'],
+        date: person_data['date'],
+        index: index + 1
+      )
     end
-  elsif file_path == PEOPLE_FILE
-    json_data.map.with_index do |person_data, index|
-      if person_data['classroom'].nil?
-        Teacher.new(person_data['age'], person_data['specialization'], name: person_data['name'], index: index + 1)
-      else
-        Student.new(person_data['age'], Classroom.new(person_data['classroom']['classroom&.label']), parent_permission: person_data['parent_permission'], name: person_data['name'], date: person_data['date'], index: index + 1)
-      end
-    end
-  elsif file_path == RENTALS_FILE
-    json_data.map.with_index do |rental_data, index|
-      book_data = rental_data['book']
-      book = Book.new(book_data['title'], book_data['author'], book_data['index'])
-      person_data = rental_data['person']
-      person = Person.new(person_data['age'], person_data['parent_permission'], person_data['name'])
-      Rental.new(rental_data['date'], person, book)
-    end
+  end
+end
+
+def load_rentals(json_data)
+  json_data.map.with_index do |rental_data, _index|
+    book_data = rental_data['book']
+    book = Book.new(book_data['title'], book_data['author'], book_data['index'])
+    person_data = rental_data['person']
+    person = Person.new(person_data['age'], person_data['parent_permission'], person_data['name'])
+    Rental.new(rental_data['date'], person, book)
   end
 end
 
@@ -73,7 +91,6 @@ def all_people(people)
     puts
   end
 end
-
 
 def create_person(people)
   puts 'Select person type:'

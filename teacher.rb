@@ -20,5 +20,5 @@ class Teacher < Person
       name: @name,
       index: @index
     }.to_json
-  end  
+  end
 end
