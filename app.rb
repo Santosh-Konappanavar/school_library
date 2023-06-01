@@ -201,3 +201,10 @@ def rental_info(rental, index)
   puts "#{index + 1}.  #{date_info} - #{book_info} - #{person_info}"
   puts
 end
+
+def quit(books, people, rentals)
+  save_data(books, BOOKS_FILE)
+  save_data(people, PEOPLE_FILE)
+  save_data(rentals, RENTALS_FILE)
+  puts 'Thanks for using this App!'
+end
