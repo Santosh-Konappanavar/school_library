@@ -42,13 +42,12 @@ def load_people(json_data)
     if person_data['classroom'].nil?
       Teacher.new(person_data['age'], person_data['specialization'], name: person_data['name'], index: index + 1)
     else
-      classroom = Classroom.new(person_data['classroom']['classroom&.label'])
+      classroom = Classroom.new(person_data['classroom'])
       Student.new(
         person_data['age'],
         classroom,
         parent_permission: person_data['parent_permission'],
         name: person_data['name'],
-        date: person_data['date'],
         index: index + 1
       )
     end
