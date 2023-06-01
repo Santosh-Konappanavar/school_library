@@ -1,9 +1,9 @@
 require_relative 'app'
 
 def main
-  books = []
-  people = []
-  rentals = []
+  books = load_data(BOOKS_FILE) || []
+  people = load_data(PEOPLE_FILE) || []
+  rentals = load_data(RENTALS_FILE) || []
 
   loop do
     display
@@ -42,7 +42,7 @@ def handler(option, books, people, rentals)
     4 => -> { create_book(books) },
     5 => -> { create_rental(people, books, rentals) },
     6 => -> { list_rentals(rentals) },
-    7 => -> { quit }
+    7 => -> { quit(books, people, rentals) }
   }
 
   action = optionactions[option]
