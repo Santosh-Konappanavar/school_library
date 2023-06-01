@@ -27,6 +27,15 @@ class Person < Nameable
     Rental.new(date, book, self)
   end
 
+  def to_json(*_args)
+    {
+      age: @age,
+      classroom: @classroom,
+      parent_permission: @parent_permission,
+      name: @name
+    }.to_json
+  end
+
   private
 
   def of_age?

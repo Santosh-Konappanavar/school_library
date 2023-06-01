@@ -10,4 +10,9 @@ class Classroom
     student.classroom = self
     @students << student
   end
+    def to_json(*_args)
+    {
+     classroom: @classroom&.label,
+    }.to_json
+  end
 end

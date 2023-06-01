@@ -1,3 +1,4 @@
+require 'json'
 require_relative 'person'
 require_relative 'classroom'
 require_relative 'book'
@@ -5,11 +6,54 @@ require_relative 'rental'
 require_relative 'student'
 require_relative 'teacher'
 
+BOOKS_FILE = 'books.json'
+PEOPLE_FILE = 'people.json'
+RENTALS_FILE = 'rentals.json'
+
+def save_data(data, file_path)
+  File.open(file_path, 'w') do |file|
+    file.write(JSON.generate(data))
+  end
+  puts "Data saved to #{file_path}!"
+end
+
+
+def load_data(file_path)
+  return [] unless File.exist?(file_path)
+
+  file_data = File.open(file_path, 'r') { |file| file.read }
+  json_data = JSON.parse(file_data)
+
+  if file_path == BOOKS_FILE
+    json_data.map.with_index do |book_data, index|
+      Book.new(book_data['title'], book_data['author'], index + 1)
+    end
+  elsif file_path == PEOPLE_FILE
+    json_data.map.with_index do |person_data, index|
+      if person_data['classroom'].nil?
+        Teacher.new(person_data['age'], person_data['specialization'], name: person_data['name'], index: index + 1)
+      else
+        Student.new(person_data['age'], Classroom.new(person_data['classroom']['classroom&.label']), parent_permission: person_data['parent_permission'], name: person_data['name'], date: person_data['date'], index: index + 1)
+      end
+    end
+  elsif file_path == RENTALS_FILE
+    json_data.map.with_index do |rental_data, index|
+      book_data = rental_data['book']
+      book = Book.new(book_data['title'], book_data['author'], book_data['index'])
+      person_data = rental_data['person']
+      person = Person.new(person_data['age'], person_data['parent_permission'], person_data['name'])
+      Rental.new(rental_data['date'], person, book)
+    end
+  end
+end
+
 def all_books(books)
   puts 'List of books:'
   puts
   books.each_with_index do |book, index|
-    puts "#{index + 1}. Title: #{book.title}, Author: #{book.author}"
+    title = book.title
+    author = book.author
+    puts "#{index + 1}. Title: #{title}, Author: #{author}"
     puts
   end
 end
@@ -21,12 +65,15 @@ def all_people(people)
     role = person.is_a?(Student) ? 'Student' : 'Teacher'
     if person.is_a?(Student)
       puts "#{index + 1}. #{role}: #{person.name}, Age: #{person.age}, ID: #{person.id}, Date: #{person.date}"
-    else
+    elsif person.is_a?(Teacher)
       puts "#{index + 1}. #{role}: #{person.name}, Age: #{person.age}, ID: #{person.id}"
+    else
+      puts "#{index + 1}. #{role}: #{person}"
     end
     puts
   end
 end
+
 
 def create_person(people)
   puts 'Select person type:'
@@ -101,6 +148,7 @@ def selectbook(books)
   all_books(books)
   print 'Book number: '
   book_index = gets.chomp.to_i
+
   selectedbook = books[book_index - 1]
 
   if selectedbook.nil?
@@ -152,8 +200,4 @@ def rental_info(rental, index)
   date_info = "Date: #{rental.date}"
   puts "#{index + 1}.  #{date_info} - #{book_info} - #{person_info}"
   puts
-end
-
-def quit
-  puts 'Thanks for using this App!'
 end
